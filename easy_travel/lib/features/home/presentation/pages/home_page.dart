@@ -3,8 +3,8 @@ import 'package:easy_travel/features/home/domain/destination.dart';
 import 'package:easy_travel/features/home/presentation/blocs/destinations_bloc.dart';
 import 'package:easy_travel/features/home/presentation/blocs/destinations_event.dart';
 import 'package:easy_travel/features/home/presentation/blocs/destinations_state.dart';
-import 'package:easy_travel/features/home/presentation/destination_card.dart';
-import 'package:easy_travel/features/home/presentation/destination_detail_page.dart';
+import 'package:easy_travel/features/home/presentation/widgets/destination_card.dart';
+import 'package:easy_travel/features/home/presentation/pages/destination_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

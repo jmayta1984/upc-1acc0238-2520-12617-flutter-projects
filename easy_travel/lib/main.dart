@@ -1,4 +1,4 @@
-import 'package:easy_travel/features/auth/presentation/login_page.dart';
+import 'package:easy_travel/features/auth/presentation/pages/login_page.dart';
 import 'package:easy_travel/core/ui/theme.dart';
 import 'package:easy_travel/features/home/data/destination_service.dart';
 import 'package:easy_travel/features/home/presentation/blocs/destinations_bloc.dart';
