@@ -8,7 +8,7 @@ class DestinationService {
   final String baseUrl =
       'https://destinationapp-h4e8dvace3fqffbb.eastus-01.azurewebsites.net/api/destinations';
 
-  Future<List<Destination>> getDestinations(String category) async {
+  Future<List<Destination>> getDestinations({String category = ''}) async {
     final query = category == 'All' ? '': category;
     final response = await http.get(Uri.parse('$baseUrl?type=$query'));
 
