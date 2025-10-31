@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'package:easy_travel/features/home/data/destination_service.dart';
+import 'package:easy_travel/features/home/domain/category.dart';
 import 'package:easy_travel/features/home/presentation/blocs/destinations_event.dart';
 import 'package:easy_travel/features/home/presentation/blocs/destinations_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DestinationsBloc extends Bloc<DestinationsEvent, DestinationsState> {
-  final DestinationService destinationService;
-  DestinationsBloc({required this.destinationService})
+  final DestinationService service;
+  DestinationsBloc({required this.service})
     : super(DestinationsState()) {
     on<GetDestinationsByCategory>(_getDestinationsByCategory);
     on<GetAllDestinations>(_getAllDestinations);
@@ -16,6 +17,12 @@ class DestinationsBloc extends Bloc<DestinationsEvent, DestinationsState> {
     GetDestinationsByCategory event,
     Emitter emit,
   ) async {
+
+    if (event.category == state.selectedCategory &&
+      state.destinations.isNotEmpty) {
+    return;
+  }
+  
     emit(
       state.copyWith(
         isLoading: true,
@@ -24,7 +31,7 @@ class DestinationsBloc extends Bloc<DestinationsEvent, DestinationsState> {
       ),
     );
     try {
-      final destinations = await destinationService.getDestinations(
+      final destinations = await service.getDestinations(
         category: event.category,
       );
       emit(state.copyWith(isLoading: false, destinations: destinations));
@@ -38,10 +45,10 @@ class DestinationsBloc extends Bloc<DestinationsEvent, DestinationsState> {
     Emitter emit,
   ) async {
     emit(
-      state.copyWith(isLoading: true, selectedCategory: 'All', message: null),
+      state.copyWith(isLoading: true, selectedCategory: CategoryType.all, message: null),
     );
     try {
-      final destinations = await destinationService.getDestinations();
+      final destinations = await service.getDestinations();
       emit(state.copyWith(isLoading: false, destinations: destinations));
     } catch (e) {
       emit(state.copyWith(isLoading: false, message: e.toString()));

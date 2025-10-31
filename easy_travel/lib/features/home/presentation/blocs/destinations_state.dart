@@ -1,21 +1,22 @@
+import 'package:easy_travel/features/home/domain/category.dart';
 import 'package:easy_travel/features/home/domain/destination.dart';
 
 class DestinationsState {
   final bool isLoading;
-  final String selectedCategory;
+  final CategoryType selectedCategory;
   final List<Destination> destinations;
   final String message;
 
   const DestinationsState({
     this.isLoading = false,
-    this.selectedCategory = 'All',
+    this.selectedCategory = CategoryType.all,
     this.destinations = const [],
     this.message = '',
   });
 
   DestinationsState copyWith({
     bool? isLoading,
-    String? selectedCategory,
+    CategoryType? selectedCategory,
     List<Destination>? destinations,
     String? message
   }) {

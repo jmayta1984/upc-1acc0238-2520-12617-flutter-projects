@@ -16,10 +16,15 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MaterialTheme theme = MaterialTheme(TextTheme());
-    return BlocProvider(
-      create: (context) =>
-          DestinationsBloc(destinationService: DestinationService())
-            ..add(GetAllDestinations()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              DestinationsBloc(service: DestinationService())
+                ..add(GetAllDestinations()),
+        ),
+        
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: theme.light(),
