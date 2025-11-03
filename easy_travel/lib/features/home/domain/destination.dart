@@ -13,7 +13,7 @@ class Destination {
 
   factory Destination.fromJson(Map<String, dynamic> json) {
     return Destination(
-      id: json['ids'],
+      id: json['id'],
       title: json['title'],
       posterPath: json['posterPath'],
       overview: json['overview'],

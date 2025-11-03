@@ -1,7 +1,7 @@
+import 'package:easy_travel/core/enums/status.dart';
 import 'package:easy_travel/features/home/domain/category.dart';
 import 'package:easy_travel/features/home/domain/destination.dart';
 
-enum Status { initial, loading, success, failure }
 class HomeState {
   final Status status;
   final CategoryType selectedCategory;
