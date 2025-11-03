@@ -1,8 +1,8 @@
 import 'package:easy_travel/features/home/domain/category.dart';
 import 'package:easy_travel/features/home/domain/destination.dart';
-import 'package:easy_travel/features/home/presentation/blocs/destinations_bloc.dart';
-import 'package:easy_travel/features/home/presentation/blocs/destinations_event.dart';
-import 'package:easy_travel/features/home/presentation/blocs/destinations_state.dart';
+import 'package:easy_travel/features/home/presentation/blocs/home_bloc.dart';
+import 'package:easy_travel/features/home/presentation/blocs/home_event.dart';
+import 'package:easy_travel/features/home/presentation/blocs/home_state.dart';
 import 'package:easy_travel/features/home/presentation/widgets/destination_card.dart';
 import 'package:easy_travel/features/home/presentation/pages/destination_detail_page.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
 
     return Column(
       children: [
-        BlocSelector<DestinationsBloc, DestinationsState, CategoryType>(
+        BlocSelector<HomeBloc, HomeState, CategoryType>(
           selector: (state) => (state.selectedCategory),
           builder: (context, state) {
             return SizedBox(
@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
                   return FilterChip(
                     label: Text(category.label),
                     onSelected: (value) {
-                      context.read<DestinationsBloc>().add(
+                      context.read<HomeBloc>().add(
                         GetDestinationsByCategory(category: category),
                       );
                     },
@@ -45,38 +45,40 @@ class HomePage extends StatelessWidget {
         Expanded(
           child:
               BlocSelector<
-                DestinationsBloc,
-                DestinationsState,
-                (bool, String, List<Destination>)
+                HomeBloc,
+                HomeState,
+                (Status, List<Destination>, String?)
               >(
                 selector: (state) =>
-                    (state.isLoading, state.message, state.destinations),
+                    (state.status, state.destinations, state.message),
                 builder: (context, state) {
-                  final (isLoading, message, destinations) = state;
-                  if (isLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (message.isNotEmpty) {
-                    return Center(child: Text(message));
-                  }
-
-                  return ListView.builder(
-                    itemCount: destinations.length,
-                    itemBuilder: (context, index) {
-                      final Destination destination = destinations[index];
-                      return GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                DestinationDetailPage(destination: destination),
-                          ),
-                        ),
-                        child: DestinationCard(destination: destination),
+                  final (status, destinations, message) = state;
+                  switch (status) {
+                    case Status.loading:
+                      return const Center(child: CircularProgressIndicator());
+                    case Status.failure:
+                      return Center(child: Text(message ?? 'Unknown error'));
+                    case Status.success:
+                      return ListView.builder(
+                        itemCount: destinations.length,
+                        itemBuilder: (context, index) {
+                          final Destination destination = destinations[index];
+                          return GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DestinationDetailPage(
+                                  destination: destination,
+                                ),
+                              ),
+                            ),
+                            child: DestinationCard(destination: destination),
+                          );
+                        },
                       );
-                    },
-                  );
+                    default:
+                      return SizedBox.shrink();
+                  }
                 },
               ),
         ),
