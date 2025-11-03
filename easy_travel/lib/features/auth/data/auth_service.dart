@@ -1,17 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:easy_travel/core/constants/api_constants.dart';
 import 'package:easy_travel/features/auth/domain/user.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  final String baseUrl =
-      'https://destinationapp-h4e8dvace3fqffbb.eastus-01.azurewebsites.net/api/users/login';
-
   Future<User> login(String email, String password) async {
     try {
+      final Uri uri = Uri.parse(ApiConstants.baseUrl);
       final http.Response response = await http.post(
-        Uri.parse(baseUrl),
+        uri,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'password': password}),
       );
@@ -20,9 +19,13 @@ class AuthService {
         final json = jsonDecode(response.body);
         return User.fromJson(json);
       }
-      return Future.error(response.statusCode);
+      throw HttpException('Unexpected HTTP Status: ${response.statusCode}');
+    } on SocketException {
+      throw const SocketException('Failed to establish network connection');
+    } on FormatException catch (e) {
+      throw FormatException('Failed to parse response: $e');
     } catch (e) {
-      return Future.error(e.toString());
+      throw Exception('Unexpected error while fetching destinations: $e');
     }
   }
 }
