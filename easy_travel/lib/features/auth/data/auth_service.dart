@@ -8,7 +8,9 @@ import 'package:http/http.dart' as http;
 class AuthService {
   Future<User> login(String email, String password) async {
     try {
-      final Uri uri = Uri.parse(ApiConstants.baseUrl);
+      final Uri uri = Uri.parse(
+        ApiConstants.baseUrl,
+      ).replace(path: ApiConstants.loginEndpoint);
       final http.Response response = await http.post(
         uri,
         headers: {'Content-Type': 'application/json'},
@@ -25,7 +27,7 @@ class AuthService {
     } on FormatException catch (e) {
       throw FormatException('Failed to parse response: $e');
     } catch (e) {
-      throw Exception('Unexpected error while fetching destinations: $e');
+      throw Exception('$e');
     }
   }
 }

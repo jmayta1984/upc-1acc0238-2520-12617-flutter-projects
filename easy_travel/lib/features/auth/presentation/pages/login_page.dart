@@ -1,5 +1,10 @@
+import 'package:easy_travel/core/enums/status.dart';
+import 'package:easy_travel/features/auth/presentation/blocs/login_bloc.dart';
+import 'package:easy_travel/features/auth/presentation/blocs/login_event.dart';
+import 'package:easy_travel/features/auth/presentation/blocs/login_state.dart';
 import 'package:easy_travel/features/main/presentation/main_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,54 +17,92 @@ class _LoginPageState extends State<LoginPage> {
   bool _isHidden = true;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Email',
-            ),
-            keyboardType: TextInputType.emailAddress,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Password',
-              suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    _isHidden = !_isHidden;
-                  });
-                },
-                icon: Icon(_isHidden ? Icons.visibility_off : Icons.visibility),
+    return BlocListener<LoginBloc, LoginState>(
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        switch (state.status) {
+          case Status.success:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => MainPage()),
+            );
+          case Status.failure:
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message ?? 'Unknown error')),
+            );
+          default:
+        }
+      },
+      child: Stack(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: (value) => context.read<LoginBloc>().add(
+                    OnEmailChanged(email: value),
+                  ),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Email',
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                ),
               ),
-            ),
-            obscureText: _isHidden,
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: (value) => context.read<LoginBloc>().add(
+                    OnPasswordChanged(password: value),
+                  ),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Password',
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _isHidden = !_isHidden;
+                        });
+                      },
+                      icon: Icon(
+                        _isHidden ? Icons.visibility_off : Icons.visibility,
+                      ),
+                    ),
+                  ),
+                  obscureText: _isHidden,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 48,
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: () => context.read<LoginBloc>().add(Login()),
+                    child: Text('Sign in'),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            height: 48,
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => MainPage()),
+          BlocSelector<LoginBloc, LoginState, bool>(
+            selector: (state) => state.status == Status.loading,
+            builder: (context, isLoading) {
+              if (isLoading) {
+                return Container(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer.withValues(alpha: 0.5),
+                  child: const Center(child: CircularProgressIndicator()),
                 );
-              },
-              child: Text('Sign in'),
-            ),
+              }
+              return SizedBox.shrink();
+            },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
