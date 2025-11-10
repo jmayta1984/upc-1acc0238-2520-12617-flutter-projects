@@ -18,15 +18,15 @@ class DestinationCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadiusGeometry.only(
+            borderRadius: BorderRadius.only(
               topLeft: Radius.circular(8),
               topRight: Radius.circular(8),
             ),
             child: Stack(
-              alignment: AlignmentGeometry.topRight,
+              alignment: Alignment.topRight,
               children: [
                 Hero(
-                  tag: destination,
+                  tag: destination.id,
                   child: Image.network(
                     destination.posterPath,
                     height: 200,
@@ -38,7 +38,7 @@ class DestinationCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ClipOval(
                     child: Container(
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.surface ,
                       child: SizedBox(
                         width: 40,
                         height: 40,
