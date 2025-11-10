@@ -20,4 +20,6 @@ class DestinationDao {
     final List<Map<String, dynamic>> maps = await db.query('destinations');
     return maps.map((map) => Destination.fromMap(map)).toList();
   }
+
+  
 }

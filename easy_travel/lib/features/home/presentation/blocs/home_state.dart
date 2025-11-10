@@ -1,11 +1,11 @@
 import 'package:easy_travel/core/enums/status.dart';
 import 'package:easy_travel/features/home/domain/category.dart';
-import 'package:easy_travel/features/home/domain/destination.dart';
+import 'package:easy_travel/features/home/presentation/models/destination_ui.dart';
 
 class HomeState {
   final Status status;
   final CategoryType selectedCategory;
-  final List<Destination> destinations;
+  final List<DestinationUi> destinations;
   final String? message;
 
   const HomeState({
@@ -18,7 +18,7 @@ class HomeState {
   HomeState copyWith({
     Status? status,
     CategoryType? selectedCategory,
-    List<Destination>? destinations,
+    List<DestinationUi>? destinations,
     String? message
   }) {
     return HomeState(

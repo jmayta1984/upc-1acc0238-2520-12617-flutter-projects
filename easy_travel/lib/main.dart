@@ -2,6 +2,7 @@ import 'package:easy_travel/features/auth/data/auth_service.dart';
 import 'package:easy_travel/features/auth/presentation/blocs/login_bloc.dart';
 import 'package:easy_travel/features/auth/presentation/pages/login_page.dart';
 import 'package:easy_travel/core/ui/theme.dart';
+import 'package:easy_travel/features/home/data/destination_dao.dart';
 import 'package:easy_travel/features/home/data/destination_service.dart';
 import 'package:easy_travel/features/home/domain/category.dart';
 import 'package:easy_travel/features/home/presentation/blocs/home_bloc.dart';
@@ -23,7 +24,7 @@ class MainApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) =>
-              HomeBloc(service: DestinationService())
+              HomeBloc(service: DestinationService(), dao: DestinationDao())
                 ..add(GetDestinationsByCategory(category: CategoryType.all)),
         ),
         BlocProvider(create: (context) => LoginBloc(service: AuthService())),
