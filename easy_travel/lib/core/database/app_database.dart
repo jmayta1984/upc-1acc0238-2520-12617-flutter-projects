@@ -25,7 +25,7 @@ class AppDatabase {
         db.execute('''create table destinations
        (id integer primary key,
        title text,
-       poster_path text
+       poster_path text,
        overview text)''');
       },
       version: 1,
