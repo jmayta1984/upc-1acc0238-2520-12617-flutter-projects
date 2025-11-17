@@ -50,10 +50,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     GetDestinationsByCategory event,
     Emitter<HomeState> emit,
   ) async {
+    /*
     if (event.category == state.selectedCategory &&
         state.destinations.isNotEmpty) {
       return;
     }
+    */
 
     emit(
       state.copyWith(status: Status.loading, selectedCategory: event.category),

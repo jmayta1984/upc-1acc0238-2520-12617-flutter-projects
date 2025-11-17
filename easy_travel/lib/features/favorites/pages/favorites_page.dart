@@ -14,6 +14,7 @@ class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FavoritesBloc, FavoritesState>(
+      listenWhen: (previous, current) => previous.destinations != current.destinations,
       listener: (context, state) => context.read<HomeBloc>().add(
         GetDestinationsByCategory(category: CategoryType.all),
       ),
