@@ -13,6 +13,44 @@ class DestinationDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => Dialog(
+              child: Padding(
+                padding: EdgeInsetsGeometry.all(16),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Leave a review',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Review',
+                            border: OutlineInputBorder(),
+                          ),
+                          minLines: 3,
+                          maxLines: 3,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ReviewRating(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
       body: Column(
         children: [
           Hero(
@@ -32,6 +70,42 @@ class DestinationDetailPage extends StatelessWidget {
             child: ReviewList(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ReviewRating extends StatefulWidget {
+  const ReviewRating({super.key});
+
+  @override
+  State<ReviewRating> createState() => _ReviewRatingState();
+}
+
+class _ReviewRatingState extends State<ReviewRating> {
+  int rating = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(
+          5,
+          (index) => IconButton(
+            onPressed: () {
+              setState(() {
+                rating = index + 1;
+              });
+            },
+
+            icon: Icon(
+              rating > index ? Icons.star : Icons.star_border,
+              color: rating > index ? Colors.amber : Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
       ),
     );
   }
