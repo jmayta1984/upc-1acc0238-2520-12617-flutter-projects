@@ -4,5 +4,6 @@ class ApiConstants {
   static final String destinationsEndpoint = '/api/destinations';
   static final String loginEndpoint = '/api/users/login';
   static final String registerEndpoint = '/api/users/register';
+  static final String reviewsEndpoint = '/api/comments';
   
 }
