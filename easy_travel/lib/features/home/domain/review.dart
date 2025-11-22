@@ -1,19 +1,22 @@
 class Review {
   final String comment;
   final int rating;
-  final String name;
+  final String userName;
+  final DateTime date;
 
   const Review({
     required this.comment,
     required this.rating,
-    required this.name,
+    required this.userName,
+    required this.date,
   });
 
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
       comment: json['comment'],
       rating: json['rating'],
-      name: '${json['user']['lastName']}, ${json['user']['firstName']}',
+      userName: '${json['user']['lastName']}, ${json['user']['firstName']}',
+      date: DateTime.parse(json['date']),
     );
   }
 }
