@@ -9,6 +9,7 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
   final ReviewService service;
   ReviewBloc({required this.service}) : super(ReviewState()) {
     on<GetReviews>(_getReviews);
+    on<SubmitReview>(_submitReview);
   }
 
   FutureOr<void> _getReviews(
@@ -17,6 +18,20 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
   ) async {
     emit(state.copyWith(status: Status.loading));
     try {
+      final reviews = await service.getReviewsByDestinationId(event.id);
+      emit(state.copyWith(reviews: reviews, status: Status.success));
+    } catch (e) {
+      emit(state.copyWith(message: e.toString(), status: Status.failure));
+    }
+  }
+
+  FutureOr<void> _submitReview(
+    SubmitReview event,
+    Emitter<ReviewState> emit,
+  ) async {
+    emit(state.copyWith(status: Status.loading));
+    try {
+      await service.submitReview(event.id, event.comment, event.rating);
       final reviews = await service.getReviewsByDestinationId(event.id);
       emit(state.copyWith(reviews: reviews, status: Status.success));
     } catch (e) {

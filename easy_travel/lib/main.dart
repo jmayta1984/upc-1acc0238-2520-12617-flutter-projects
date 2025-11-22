@@ -1,15 +1,19 @@
 import 'package:easy_travel/features/auth/data/auth_service.dart';
+import 'package:easy_travel/features/auth/presentation/blocs/auth_bloc.dart';
+import 'package:easy_travel/features/auth/presentation/blocs/auth_event.dart';
 import 'package:easy_travel/features/auth/presentation/blocs/login_bloc.dart';
-import 'package:easy_travel/features/auth/presentation/pages/login_page.dart';
 import 'package:easy_travel/core/ui/theme.dart';
+import 'package:easy_travel/features/auth/presentation/pages/splash_page.dart';
 import 'package:easy_travel/features/favorites/blocs/favorites_bloc.dart';
 import 'package:easy_travel/features/favorites/blocs/favorites_event.dart';
 import 'package:easy_travel/features/home/data/destination_dao.dart';
 import 'package:easy_travel/features/home/data/destination_repository_impl.dart';
 import 'package:easy_travel/features/home/data/destination_service.dart';
+import 'package:easy_travel/features/home/data/review_service.dart';
 import 'package:easy_travel/features/home/domain/category.dart';
 import 'package:easy_travel/features/home/presentation/blocs/home_bloc.dart';
 import 'package:easy_travel/features/home/presentation/blocs/home_event.dart';
+import 'package:easy_travel/features/home/presentation/blocs/review_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,12 +42,14 @@ class MainApp extends StatelessWidget {
           create: (context) =>
               FavoritesBloc(dao: DestinationDao())..add(GetAllFavorites()),
         ),
+        BlocProvider(create: (context) => ReviewBloc(service: ReviewService())),
+        BlocProvider(create: (context) => AuthBloc()..add(const AppStarted())),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: theme.light(),
         darkTheme: theme.dark(),
-        home: Scaffold(body: LoginPage()),
+        home: const SplashPage(),
       ),
     );
   }

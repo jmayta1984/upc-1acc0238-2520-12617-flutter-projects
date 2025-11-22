@@ -5,6 +5,8 @@ import 'package:easy_travel/features/home/domain/category.dart';
 import 'package:easy_travel/features/home/presentation/blocs/home_bloc.dart';
 import 'package:easy_travel/features/home/presentation/blocs/home_event.dart';
 import 'package:easy_travel/features/home/presentation/blocs/home_state.dart';
+import 'package:easy_travel/features/home/presentation/blocs/review_bloc.dart';
+import 'package:easy_travel/features/home/presentation/blocs/review_event.dart';
 import 'package:easy_travel/features/home/presentation/models/destination_ui.dart';
 import 'package:easy_travel/features/home/presentation/widgets/destination_card.dart';
 import 'package:easy_travel/features/home/presentation/pages/destination_detail_page.dart';
@@ -78,14 +80,22 @@ class HomePage extends StatelessWidget {
                               final DestinationUi destination =
                                   destinations[index];
                               return GestureDetector(
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => DestinationDetailPage(
-                                      destination: destination.destination,
+                                onTap: () {
+                                  context.read<ReviewBloc>().add(
+                                    GetReviews(id: destination.destination.id),
+                                  );
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          DestinationDetailPage(
+                                            destination:
+                                                destination.destination,
+                                          ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                },
                                 child: DestinationCard(
                                   destinationUi: destination,
                                 ),

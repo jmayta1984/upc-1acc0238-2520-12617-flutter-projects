@@ -1,4 +1,3 @@
-import 'package:easy_travel/features/home/data/review_service.dart';
 import 'package:easy_travel/features/home/domain/destination.dart';
 import 'package:easy_travel/features/home/presentation/blocs/review_bloc.dart';
 import 'package:easy_travel/features/home/presentation/blocs/review_event.dart';
@@ -30,12 +29,7 @@ class DestinationDetailPage extends StatelessWidget {
             ),
           ),
 
-          BlocProvider(
-            create: (context) =>
-                ReviewBloc(service: ReviewService())
-                  ..add(GetReviews(id: destination.id)),
-            child: ReviewList(),
-          ),
+          ReviewList(),
         ],
       ),
     );
@@ -46,7 +40,7 @@ class DestinationDetailPage extends StatelessWidget {
     String comment = '';
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (_) => AlertDialog(
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -54,6 +48,13 @@ class DestinationDetailPage extends StatelessWidget {
           ),
           FilledButton(
             onPressed: () {
+              context.read<ReviewBloc>().add(
+                SubmitReview(
+                  id: destination.id,
+                  comment: comment,
+                  rating: rating,
+                ),
+              );
               Navigator.pop(context);
             },
             child: Text('Submit'),
