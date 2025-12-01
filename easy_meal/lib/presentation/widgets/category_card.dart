@@ -20,15 +20,18 @@ class CategoryCard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               category.name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              category.description,
-              style: const TextStyle(fontSize: 16),
-              maxLines: 2,
+            child: SizedBox(
+              width: double.infinity,
+              child: Text(
+                category.description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
         ],

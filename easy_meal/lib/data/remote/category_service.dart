@@ -19,7 +19,7 @@ class CategoryService {
       }
       return Future.error('Failed to load categories: ${response.statusCode}');
     } catch (e) {
-      return Future.error('Error fetching categories: $e');
+      return Future.error('Failed to load categories: $e');
     }
   }
 }
